@@ -1,0 +1,36 @@
+#--------------------------------------------------------------------------
+#  Intel 2016/OpenMPI compiler settings for GPSC, for use with SSM commands:
+#  . ssmuse-sh -d main/opt/intelcomp/intelcomp-2016.1.156
+#  . ssmuse-sh -d main/opt/openmpi/openmpi-2.1.1/intel-2016.1.156--hpcx-1.8
+#  . ssmuse-sh -x /fs/ssm/comm/dfo/exp/netcdf/20180110/intel-2016.1.156
+#
+#  As of June 2018, the recommended ordenv setup for your .profile is:
+#
+#  export ORDENV_SITE_PROFILE=20180528
+#  export ORDENV_COMM_PROFILE=
+#  export ORDENV_GROUP_PROFILE=
+#  . /fs/ssm/main/env/ordenv-boot-20180430.sh
+#
+#--------------------------------------------------------------------------
+         COMPILER = -DIFORT
+
+         CPP      = /usr/bin/cpp
+         CC       = mpicc
+         CXX      = mpicxx
+
+         FC       = mpif90
+
+#         DEBFLGS  = -check all -traceback
+#         OPT      = -O0 -g
+#         OPT      = -O3 -g
+          FVLIBS   = /gpfs/fs1/dfo/dfo_odis/diw001/install/
+          IOLIBS   = -lnetcdff
+ 
+          CFLAGS   = -I$(FVLIBS)/include
+ 
+          F90FLAGS = -diag-disable 5140 -I$(FVLIBS)/include
+ 
+          LDFLAGS  = -L$(FVLIBS)/lib -Wl,-rpath=$(FVLIBS)/lib
+ 
+          OPT      = -O3 -g
+

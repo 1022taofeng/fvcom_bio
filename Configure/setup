@@ -1,0 +1,183 @@
+#!/bin/bash
+
+set -e
+
+function usage()
+{
+  cat <<EOM
+Usage: $0 [arguments]
+
+    -a|--arch architecture
+    Selects an architecture
+
+    -c|--config configuration
+    Selects a configuration
+
+    -l|--list
+    Lists available architecture and configuration files
+
+    -h|--help
+    Displays this help
+
+    -s|--show
+    Show the currently selected arch/config
+
+    -w|--write
+    Writes the currently selected pieces to FVCOM_source/make.inc
+
+    -g|--generate
+    Generate all setup commands
+
+    Examples:
+    ./setup -a GPSC-IFORT-2016 -c VancouverHarbourV2
+    ./setup -a IOSHPC-IFORT-15 -c VancouverHarbourV2
+    ./setup -a FEDORA-GCC -c VancouverHarbourV2
+
+EOM
+}
+
+function writemakeinc()
+{
+    if  [ ! -f arch/current ] || [ ! -f config/current ]; then
+      echo "Please set an architecture and config!"
+      exit 1
+    else
+      PWD=`pwd`
+      TOPDIR=`dirname $PWD`/FVCOM_source
+      DEST=${TOPDIR}/make.inc
+      echo "Rewriting make.inc with TOPDIR = ${TOPDIR}"
+      \cat arch/make.inc_preamble | sed s!TOPDIRPLACEHOLDER!$TOPDIR!1 > $DEST
+      \cat config/current >> $DEST
+      \cat arch/current >> $DEST
+      \cat arch/make.inc_afteramble >> $DEST
+    fi
+}
+
+function listarch()
+{
+  echo "Available architectures: "
+  for x in `\ls arch | grep -v make.inc | grep -v current | sort`; do
+    echo "  $x"
+  done
+  echo ""
+}
+
+function listconfig()
+{
+  echo "Available configurations:"
+  for x in `\ls config | grep -v current | sort`; do
+    echo "  $x"
+  done
+  echo ""
+}
+
+
+PWD=`pwd`
+NAME=`basename $PWD`
+if [ $NAME != "Configure" ]; then
+  echo "$0 should be run from directory Configure, exiting"
+  exit 1
+fi
+
+if [ "$#" -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+    case $key in
+        -a|--arch)
+        # Set the current architecture
+        ARCH="$2"
+        ARCHFILE=arch/$ARCH
+        if [ -n "$ARCH" ] && [ -f $ARCHFILE ]; then
+          echo "Selecting arch file $ARCHFILE"
+          echo ""
+          \ln -fs $ARCH arch/current
+        else
+          echo "Arch file ${ARCH} not found."
+          listarch
+          exit 1
+        fi
+        shift
+        shift
+        ;;
+
+        -c|--config)
+        # Set the current configuration
+        CONFIG="$2"
+        CONFIGFILE=config/$CONFIG
+        if  [ -n "$CONFIG" ]  && [ -f $CONFIGFILE ]; then
+          echo "Selecting config file $CONFIGFILE"
+          echo ""
+          \ln -fs $CONFIG config/current
+        else
+          echo "Config file ${CONFIG} not found."
+          listconfig
+          exit 1
+        fi
+        shift
+        shift
+        ;;
+
+        -l|--list)
+        # List the arch and config files
+        listarch
+        listconfig
+        exit
+        shift
+        ;;
+
+        -h|--help)
+        # Print help and quit
+        usage
+        exit
+        shift
+        ;;
+
+        -s|--show)
+        # Print the currently selected arch / config
+        if  [ -f arch/current ]; then
+          echo "Current arch  : "`\readlink arch/current`
+        else
+          echo "Current arch  : not set"
+        fi
+        if  [ -f config/current ]; then
+          echo "Current config: "`\readlink config/current`
+        else
+          echo "Current config: not set"
+        fi
+        exit
+        shift
+        ;;
+
+        -w|--write)
+        # Rewrite make.inc (note that this is called via the Makefile)
+        writemakeinc
+        exit
+        shift
+        ;;
+
+        -g|--generate)
+        # Print out the commands needed to get setup
+        echo "Please run one of these ./setup commands to set arch and config:"
+        for a in `\ls arch | grep -v make.inc | grep -v current | xargs echo`; do
+          for c in `\ls config | grep -v current | xargs echo`; do
+            echo "./setup -a $a -c $c"
+          done
+        done
+        echo "Please run one of these make commands to build fvcom:"
+	    echo "make libs fvcom"
+	    echo "make libs gotm fvcom"
+        exit
+        shift
+        ;;
+
+        *)    # unknown option, ignore it
+        shift
+        ;;
+    esac
+done
+

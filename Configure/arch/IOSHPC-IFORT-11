@@ -1,0 +1,21 @@
+#--------------------------------------------------------------------------
+#  Intel/MPI Compiler Definitions for IOS HPC (Intel 11)
+#--------------------------------------------------------------------------
+         COMPILER = -DIFORT
+         FVLIBS   = /export/opt/netcdf/netcdf-medium
+         IOLIBS = -lnetcdf
+
+         CPP      = /usr/bin/cpp
+         CC       = mpicc
+         CXX      = mpicxx
+         CFLAGS   = -I$(FVLIBS)/include
+
+         FC       = mpif90
+         F90FLAGS = -diag-disable 5140 -I$(FVLIBS)/include
+
+         LDFLAGS  = -L$(FVLIBS)/lib -Wl,-rpath=$(FVLIBS)/lib
+
+#         DEBFLGS  = -check all -traceback
+#         OPT      = -O0 -g
+         OPT      = -O3 -g
+

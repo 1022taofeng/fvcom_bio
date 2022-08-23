@@ -1,0 +1,16 @@
+#  GCC Compiler Definitions (Ubuntu 16.04)
+#--------------------------------------------------------------------------
+         COMPILER  = -DGFORTRAN -Df2cFortran
+         F90FLAGS  = -ffree-line-length-0 -g -I/usr/include
+#         DEBFLGS   = -fbounds-check
+
+         CPP      = /usr/bin/cpp
+         CC       = mpicc
+         CXX      = mpicxx
+         HDF5     = /usr/lib/x86_64-linux-gnu/hdf5/serial
+         CFLAGS   = -O3 -I$(HDF5)/include -I/usr/include
+         LDFLAGS  = -L$(HDF5)/lib -Wl,-rpath=$(HDF5)/lib
+         FC       = mpif90
+#         OPT      = -O0 -g
+         OPT      = -O3
+

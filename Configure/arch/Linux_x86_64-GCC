@@ -1,0 +1,14 @@
+#  GCC Compiler Definitions
+#--------------------------------------------------------------------------
+         COMPILER  = -DGFORTRAN -Df2cFortran
+         F90FLAGS  = -ffree-line-length-0 -g
+#         DEBFLGS   = -fbounds-check
+
+         CPP      = /usr/bin/cpp
+         CC       = mpicc
+         CXX      = mpicxx
+         CFLAGS   = -O3
+         FC       = mpif90
+#         OPT      = -O0 -g
+         OPT      = -O3
+

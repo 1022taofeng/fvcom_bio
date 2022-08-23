@@ -1,0 +1,21 @@
+#--------------------------------------------------------------------------
+#  Intel 2016/OpenMPI compiler settings for Compute Canada (graham):
+#
+#   Modules required to compile.
+#   module load netcdf-fortran-mpi/4.4.4
+#   module load netcdf-mpi/4.4.1.1
+#
+#--------------------------------------------------------------------------
+         COMPILER = -DIFORT
+
+         CPP      = /usr/bin/cpp
+         CC       = mpicc
+         CXX      = mpicxx
+
+         FC       = mpif90
+         F90FLAGS = -diag-disable 5140
+
+#         DEBFLGS  = -check all -traceback
+#         OPT      = -O0 -g
+         OPT      = -O3 -g
+

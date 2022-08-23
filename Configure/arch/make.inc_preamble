@@ -1,0 +1,93 @@
+#/===========================================================================/
+# Copyright (c) 2007, The University of Massachusetts Dartmouth 
+# Produced at the School of Marine Science & Technology 
+# Marine Ecosystem Dynamics Modeling group
+# All rights reserved.
+#
+# FVCOM has been developed by the joint UMASSD-WHOI research team. For 
+# details of authorship and attribution of credit please see the FVCOM
+# technical manual or contact the MEDM group.
+#
+# 
+# This file is part of FVCOM. For details, see http://fvcom.smast.umassd.edu 
+# The full copyright notice is contained in the file COPYRIGHT located in the 
+# root directory of the FVCOM code. This original header must be maintained
+# in all distributed versions.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+# AND ANY EXPRESS OR  IMPLIED WARRANTIES, INCLUDING,  BUT NOT  LIMITED TO,
+# THE IMPLIED WARRANTIES OF MERCHANTABILITY AND  FITNESS FOR A PARTICULAR
+# PURPOSE ARE DISCLAIMED.  
+#
+#/---------------------------------------------------------------------------/
+# CVS VERSION INFORMATION
+# $Id$
+# $Name$
+# $Revision$
+#/===========================================================================/
+
+#==========================================================================
+#
+#    WELCOME TO FVCOM
+#
+#    TO BUILD FVCOM, PLEASE SET THE FOLLOWING IN THIS FILE:
+#        TOPDIR - the directory this make.inc file is in
+#        LIBDIR - the directroy where libraries are installed
+#        INCIDR - the directroy where include files are installed 
+#
+#        CHOOSE YOUR MODEL OPTIONS - The Def Flags!
+#
+#        CHOOSE A COMPILER FROM THE LIST OR CREATE YOUR OWN
+#
+#    You can also use the makefile to build and install some of the libraries
+#    used by fvcom. Set the INSTALLDIR and choose the 'LOCAL INSTALL' option
+#    below. Select an non-mpi compiler from the list and run 'make libs_ext'
+#
+#    Good Luck!
+#
+#========== TOPDIR ========================================================
+# TOPDIR is the directory in which this make file and the fvcom source reside
+# TOPDIR must be set!
+#
+           TOPDIR        = TOPDIRPLACEHOLDER
+#
+#========== INSTALLDIR =====================================================
+# INSTALLDIR is the directory where you wish to install external libraries
+# The default is in the $(TOPDIR)/libs/install, but you can choose...
+#
+           INSTALLDIR    = $(TOPDIR)/libs/install
+#
+#===========================================================================
+# PREPROCESSOR OPTIONS FOR CPP
+           DEF_FLAGS     = -P -traditional
+#===========================================================================
+#
+           LIBDIR        = -L$(INSTALLDIR)/lib
+           INCDIR        = -I$(INSTALLDIR)/include
+#
+#--------------------------------------------------------------------------
+#	STANDARD LIBRARIES FOR DATA AND TIME IN FVCOM:
+#
+	       DTLIBS	     = -ljulian
+	       DTINCS        =
+#
+#--------------------------------------------------------------------------
+#        NETCDF OUTPUT      NETCDF IS NOW REQUIRED TO COMPILE FVCOM
+#                           DUMP OUTPUT INTO NETCDF FILES (yes/no)
+#                           REQUIRES SYSTEM DEPENDENT NETCDF LIBRARIES
+#                           COMPILED WITH SAME F90 COMPILER
+#                           SET PATH TO LIBRARIES WITH IOLIBS      
+#                           SET PATH TO INCLUDE FILES (netcdf.mod) WITH IOINCS
+#--------------------------------------------------------------------------
+           IOINCS        = 
+           IOLIBS        = -lnetcdff -lnetcdf
+#--------------------------------------------------------------------------
+#
+#--------------------------------------------------------------------------
+#  PETSC library locations (for non-hydrostatic/semi-implicit/data assimilation)
+#--------------------------------------------------------------------------
+ PETSC_FC_INCLUDES = -I /fs/vnas_Hdfo/bioios/taf000/work/fvcom_mct/petsc-2.3.3 \
+                     -I /fs/vnas_Hdfo/bioios/taf000/work/fvcom_mct/petsc-2.3.3/bmake/linux-gnu-intel \
+                     -I /fs/vnas_Hdfo/bioios/taf000/work/fvcom_mct/petsc-2.3.3/include/
+ PETSC_LIB         = -L /fs/vnas_Hdfo/bioios/taf000/work/fvcom_mct/petsc-2.3.3/lib/linux-gnu-intel/ 
+#---------------------------------------------------------------------------

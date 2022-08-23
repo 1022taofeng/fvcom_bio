@@ -1,0 +1,28 @@
+Overview
+--------
+The compiler options are system-specific and are stored in the files under 'arch'.
+
+The preprocessor flags are configuration-specfic and are set in the files under 'config'.
+
+The ./setup script selects an arch and config file (see below), and also rewrites make.inc by pasting the pieces together and setting TOPDIR.
+
+The Makefile ensures that make.inc is rewritten before calling make as requested.
+
+Compiling FVCOM
+---------------
+
+1) Select an architecture (-a) and configuration (-c) with './setup'. Example:
+
+  ./setup -a GPSC-IFORT-2013 -c VancouverHarbourV2
+
+  To see available arch/configs use: ./setup -l
+  To generate the ./setup commands, use: ./setup -g
+
+2) Use "make libs" to compile the external libraries under FVCOM_source/libs
+
+3) Use "make gotm" to fetch/compile GOTM under GOTM_source (optional).
+
+4) Use "make fvcom" to build FVCOM.
+
+These steps may be combined into one line: make libs gotm fvcom
+
